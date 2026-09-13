@@ -1,0 +1,246 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BLACKOUT — Catálogo & Archivo de Productos</title>
+  <meta name="description" content="Catálogo completo de indumentaria, accesorios y archivo de diseño BLACKOUT. Tres Arroyos, Buenos Aires.">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/png" href="assets/logo (1).png">
+</head>
+<body>
+
+  <!-- SUBTLE FILM NOISE OVERLAY -->
+  <div class="noise-overlay" aria-hidden="true"></div>
+
+  <!-- STICKY MODERN HEADER -->
+  <header class="header-sticky">
+    <div class="header-grid">
+      
+      <!-- LOGO & BRAND (100% BLANCO VISIBLE) -->
+      <a href="index.html" class="brand-wrapper" aria-label="BLACKOUT Inicio">
+        <img src="assets/logo (1).png" alt="BLACKOUT Eye Symbol" class="brand-eye-symbol">
+        <img src="assets/logo (1).svg" alt="BLACKOUT" class="brand-logo-img">
+      </a>
+
+      <!-- NAVIGATION: INICIO - PRODUCTOS - CONTACTO -->
+      <nav class="header-nav font-ui" aria-label="Navegación principal">
+        <a href="index.html" class="nav-link">Inicio</a>
+        <a href="productos.html" class="nav-link active">Productos</a>
+        <a href="index.html#contacto" class="nav-link">Contacto</a>
+      </nav>
+
+      <!-- CART TRIGGER -->
+      <div>
+        <button id="cartToggleBtn" class="cart-toggle-btn font-ui" aria-label="Abrir carrito de compras">
+          <svg class="icon-svg" viewBox="0 0 24 24">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          <span>CARRITO (<span id="cartCount">0</span>)</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <main>
+    <!-- CATALOG MAIN SECTION -->
+    <section class="catalog-section">
+      
+      <!-- TOP BAR: TITLE + SEPARATE ACTION BUTTONS (FILTRAR & ORDENAR) -->
+      <div class="catalog-header-bar">
+        <div class="catalog-title-group">
+          <h2>CATÁLOGO DE PRODUCTOS</h2>
+          <p class="font-ui">Archivo vivo de indumentaria y objetos de supervivencia urbana.</p>
+        </div>
+
+        <div class="catalog-action-buttons font-ui">
+          <!-- BOTÓN FILTRAR (CON ICONO SVG DEDICADO) -->
+          <button id="btnToggleFilter" class="action-icon-btn" aria-label="Abrir panel de filtros">
+            <svg class="icon-svg" viewBox="0 0 24 24">
+              <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+            </svg>
+            <span>FILTRAR</span>
+          </button>
+
+          <!-- BOTÓN ORDENAR (CON ICONO SVG DEDICADO) -->
+          <button id="btnToggleSort" class="action-icon-btn" aria-label="Abrir panel de ordenamiento">
+            <svg class="icon-svg" viewBox="0 0 24 24">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <polyline points="19 12 12 19 5 12"></polyline>
+            </svg>
+            <span>ORDENAR</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- PANEL DESPLEGABLE: FILTRAR -->
+      <div id="filterDropdownPanel" class="dropdown-panel font-ui">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem; border-bottom:1px solid var(--border-subtle); padding-bottom:0.75rem;">
+          <span style="font-size:0.75rem; letter-spacing:0.1em; color:var(--text-dim); text-transform:uppercase; font-weight:600;">FILTROS ACTIVOS</span>
+          <button id="filterReset" class="filter-reset-btn">
+            <svg class="icon-svg" style="width:13px;height:13px;" viewBox="0 0 24 24">
+              <polyline points="1 4 1 10 7 10"></polyline>
+              <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+            </svg>
+            <span>LIMPIAR FILTROS</span>
+          </button>
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:1.25rem;">
+          <div class="filter-group">
+            <label class="filter-label" for="filterType">Categoría / Tipo</label>
+            <select id="filterType" class="filter-select">
+              <option value="all">Todas las categorías</option>
+              <option value="remeras">Remeras</option>
+              <option value="buzos">Buzos y Hoodies</option>
+              <option value="mallas">Mallas y Shorts</option>
+              <option value="gorras">Gorras</option>
+              <option value="lentes">Lentes</option>
+              <option value="mates">Mates</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label class="filter-label" for="filterColor">Color</label>
+            <select id="filterColor" class="filter-select">
+              <option value="all">Todos los colores</option>
+              <option value="negro">Negro / Black</option>
+              <option value="grafito">Grafito / Washed</option>
+              <option value="crudo">Crudo / Off-White</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label class="filter-label" for="filterSize">Talle</label>
+            <select id="filterSize" class="filter-select">
+              <option value="all">Todos los talles</option>
+              <option value="S">S</option>
+              <option value="M">M</option>
+              <option value="L">L</option>
+              <option value="XL">XL</option>
+              <option value="28">28</option>
+              <option value="30">30</option>
+              <option value="32">32</option>
+              <option value="34">34</option>
+              <option value="STD">STD</option>
+              <option value="ÚNICO">ÚNICO</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- PANEL DESPLEGABLE: ORDENAR -->
+      <div id="sortDropdownPanel" class="dropdown-panel font-ui">
+        <div style="margin-bottom:1rem; border-bottom:1px solid var(--border-subtle); padding-bottom:0.75rem;">
+          <span style="font-size:0.75rem; letter-spacing:0.1em; color:var(--text-dim); text-transform:uppercase; font-weight:600;">CRITERIO DE ORDENAMIENTO</span>
+        </div>
+
+        <div style="display:flex; flex-wrap:wrap; gap:0.75rem;">
+          <button class="action-icon-btn sort-option-btn active" data-sort="default">Por Defecto</button>
+          <button class="action-icon-btn sort-option-btn" data-sort="price-asc">Precio: Menor a Mayor</button>
+          <button class="action-icon-btn sort-option-btn" data-sort="price-desc">Precio: Mayor a Menor</button>
+          <button class="action-icon-btn sort-option-btn" data-sort="name-asc">Nombre: A - Z</button>
+          <button class="action-icon-btn sort-option-btn" data-sort="name-desc">Nombre: Z - A</button>
+        </div>
+      </div>
+
+      <!-- COUNTER BADGE -->
+      <div class="catalog-counter-badge font-ui" id="catalogCountBadge">8 piezas encontradas</div>
+
+      <!-- PRODUCTS CATALOG GRID -->
+      <div class="drop-grid" id="productsCatalogGrid">
+        <!-- Injected reactively by app.js -->
+      </div>
+
+    </section>
+  </main>
+
+  <!-- PRODUCT DETAIL MODAL (3 A 4 VISTAS Y FICHA TÉCNICA) -->
+  <div id="productDetailModal" class="product-detail-modal" role="dialog" aria-modal="true">
+    <div class="product-detail-box" id="productDetailBox">
+      <!-- Injected dynamically by app.js -->
+    </div>
+  </div>
+
+  <!-- CART SLIDE-OUT DRAWER -->
+  <div id="cartBackdrop" class="cart-backdrop"></div>
+  <aside id="cartDrawer" class="cart-drawer" role="dialog" aria-modal="true" aria-labelledby="cartDrawerTitle">
+    <div class="cart-header">
+      <h2 id="cartDrawerTitle" class="cart-title">CARRITO DE COMPRAS</h2>
+      <button id="cartCloseBtn" class="cart-close-btn" aria-label="Cerrar carrito">
+        <svg class="icon-svg" viewBox="0 0 24 24">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <div id="cartItemsList" class="cart-items-container font-ui">
+      <!-- Injected reactively by app.js -->
+    </div>
+
+    <div class="cart-footer font-ui">
+      <div class="cart-summary-line">
+        <span class="cart-summary-label">Subtotal estimado:</span>
+        <span id="cartSubtotal" class="cart-summary-amount price-tag">$0 ARS</span>
+      </div>
+      <div class="cart-shipping-notice">
+        Envíos asegurados a toda la República Argentina vía Correo / Andreani. Despacho en 24hs hábiles.
+      </div>
+      <button id="checkoutBtn" class="checkout-btn">
+        <span>FINALIZAR COMPRA</span>
+        <svg class="icon-svg" style="width:16px;height:16px;" viewBox="0 0 24 24">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </button>
+    </div>
+  </aside>
+
+  <!-- CHECKOUT MODAL -->
+  <div id="checkoutModal" class="modal-overlay" role="dialog" aria-modal="true">
+    <div class="modal-box font-ui">
+      <button id="checkoutModalClose" class="modal-close-corner" aria-label="Cerrar ventana">
+        <svg class="icon-svg" viewBox="0 0 24 24">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+      <div style="font-size: 0.72rem; color: #888; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.4rem;">PAGO SEGURO // MERCADO PAGO</div>
+      <h3 class="font-editorial" style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.25rem;">RESUMEN DEL CARRITO</h3>
+      
+      <div id="checkoutSummaryList" style="margin-bottom: 1.5rem; max-height: 200px; overflow-y: auto;">
+        <!-- Injected dynamically -->
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:baseline; padding-top: 1rem; border-top: 1px solid #2b2b2b; margin-bottom: 1.5rem;">
+        <span style="font-size: 0.85rem; color: #999;">Total final:</span>
+        <span id="checkoutModalTotal" class="price-tag" style="font-size: 1.3rem;">$0 ARS</span>
+      </div>
+
+      <div style="background: #0f0f0f; padding: 14px; border: 1px solid #1f1f1f; font-size: 0.78rem; color: #888; margin-bottom: 1.5rem; line-height: 1.4;">
+        Conexión con pasarela de Mercado Pago (Tarjetas, saldo en cuenta, débito o cuotas).
+      </div>
+
+      <button id="proceedMercadoPagoBtn" class="checkout-btn" style="background:#ffffff; color:#000000; font-weight:700;">
+        <span>PAGAR CON MERCADO PAGO</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- MINIMAL FOOTER -->
+  <footer class="footer-colophon">
+    <div class="footer-container">
+      <div class="footer-bottom-bar font-ui">
+        <span>© 2026 BLACKOUT. UN PROYECTO NACIDO EN TRES ARROYOS.</span>
+        <span>INSTAGRAM: @BLACKOUT.AR &nbsp;•&nbsp; WHATSAPP: +54 9 2983 55-4433</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

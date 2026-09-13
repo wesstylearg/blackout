@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BLACKOUT — Un proyecto nacido en Tres Arroyos</title>
+  <meta name="description" content="BLACKOUT. Indumentaria contemporánea, cultura underground y archivo de diseño. Tres Arroyos, Buenos Aires.">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/png" href="assets/logo (1).png">
+</head>
+<body>
+
+  <!-- SUBTLE FILM NOISE OVERLAY -->
+  <div class="noise-overlay" aria-hidden="true"></div>
+
+  <!-- STICKY MODERN HEADER -->
+  <header class="header-sticky">
+    <div class="header-grid">
+      
+      <!-- LOGO & BRAND (100% BLANCO VISIBLE) -->
+      <a href="index.html" class="brand-wrapper" aria-label="BLACKOUT Inicio">
+        <img src="assets/logo (1).png" alt="BLACKOUT Eye Symbol" class="brand-eye-symbol">
+        <img src="assets/logo (1).svg" alt="BLACKOUT" class="brand-logo-img">
+      </a>
+
+      <!-- NAVIGATION: INICIO - PRODUCTOS - CONTACTO -->
+      <nav class="header-nav font-ui" aria-label="Navegación principal">
+        <a href="index.html" class="nav-link active">Inicio</a>
+        <a href="productos.html" class="nav-link">Productos</a>
+        <a href="#contacto" class="nav-link">Contacto</a>
+      </nav>
+
+      <!-- CART TRIGGER -->
+      <div>
+        <button id="cartToggleBtn" class="cart-toggle-btn font-ui" aria-label="Abrir carrito de compras">
+          <svg class="icon-svg" viewBox="0 0 24 24">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+          <span>CARRITO (<span id="cartCount">0</span>)</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO SECTION: MANIFESTO & BRAND IDENTIFIER -->
+    <section class="hero-editorial" id="inicio">
+      <div class="hero-container">
+        
+        <!-- Left: Manifesto -->
+        <div class="hero-left-content">
+          <div class="hero-issue-tag font-ui">
+            <svg class="icon-svg" style="width:14px;height:14px;" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            <span>DROP 01 // FIRST EDITION // ISSUE #01</span>
+          </div>
+
+          <img src="assets/logo (3).png" alt="BLACKOUT Typography Logo" class="hero-editorial-brand-logo">
+
+          <p class="hero-manifesto-text font-editorial">
+            Un proyecto nacido en Tres Arroyos que busca redefinir la indumentaria contemporánea a través del utilitarismo, la crudeza visual y piezas de archivo concebidas para perdurar.
+          </p>
+
+          <div class="hero-actions-row">
+            <a href="productos.html" class="btn-modern btn-modern-solid">
+              <span>EXPLORAR CATÁLOGO</span>
+              <svg class="icon-svg" style="width:16px;height:16px;" viewBox="0 0 24 24">
+                <line x1="7" y1="17" x2="17" y2="7"></line>
+                <polyline points="7 7 17 7 17 17"></polyline>
+              </svg>
+            </a>
+            <a href="#contacto" class="btn-modern">
+              <span>CONTACTARNOS</span>
+            </a>
+          </div>
+
+          <div class="hero-meta-list font-ui">
+            <div class="hero-meta-item">
+              <span class="hero-meta-label">ORIGEN</span>
+              <span class="hero-meta-val">TRES ARROYOS, BA</span>
+            </div>
+            <div class="hero-meta-item">
+              <span class="hero-meta-label">DISCIPLINA</span>
+              <span class="hero-meta-val">TEXTIL DE ARCHIVO</span>
+            </div>
+            <div class="hero-meta-item">
+              <span class="hero-meta-label">ENVÍOS</span>
+              <span class="hero-meta-val">A TODO EL PAÍS</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Minimal Clean Editorial Showcase -->
+        <div class="hero-showcase-frame" style="background:#080808; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:2rem;">
+          <div class="hero-showcase-inner">
+            <svg class="icon-svg" style="width:42px;height:42px;opacity:0.5;" viewBox="0 0 24 24">
+              <rect x="3" y="3" width="18" height="18" rx="4"></rect>
+              <circle cx="8.5" cy="8.5" r="1.5"></circle>
+              <polyline points="21 15 16 10 5 21"></polyline>
+            </svg>
+            <span class="font-ui" style="font-size:0.75rem; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:#bbb;">Archivo Fotográfico Oficial</span>
+            <span class="font-ui" style="font-size:0.7rem; color:#666;">Tres Arroyos • Edición 2026</span>
+          </div>
+          <div class="hero-floating-pill font-ui">
+            <svg class="icon-svg" style="width:14px;height:14px;color:#fff;" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="9"></circle>
+              <polyline points="12 7 12 12 15 15"></polyline>
+            </svg>
+            <span>Drop 01 Disponible</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- SECTION: NUEVO DROP (4 PIEZAS DESTACADAS) -->
+    <section class="drop-section-wrapper" id="drop">
+      <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border-subtle);">
+        <div>
+          <span class="font-ui" style="font-size:0.72rem; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.1em; display:block; margin-bottom:0.3rem;">LANZAMIENTO EXCLUSIVO</span>
+          <h2 class="font-editorial" style="font-size: 2rem; font-weight:700;">EL DROP // 4 PIEZAS NUEVAS</h2>
+        </div>
+        <a href="productos.html" class="btn-modern font-ui" style="font-size: 0.78rem;">
+          <span>VER TODAS LAS PIEZAS</span>
+          <svg class="icon-svg" style="width:14px;height:14px;" viewBox="0 0 24 24">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </a>
+      </div>
+
+      <!-- 4 PRODUCTOS DESTACADOS INYECTADOS REACTIVAMENTE -->
+      <div id="homeDropGrid" class="drop-grid">
+        <!-- Rendered by app.js with click-to-view detail -->
+      </div>
+    </section>
+
+    <!-- SECTION: CATEGORÍAS / SECCIONES DE TIPO DE PRODUCTO -->
+    <section class="categories-section-wrapper">
+      <div style="margin-bottom: 2rem;">
+        <span class="font-ui" style="font-size:0.72rem; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.1em; display:block; margin-bottom:0.3rem;">EXPLORAR POR DISCIPLINA</span>
+        <h2 class="font-editorial" style="font-size: 2rem; font-weight:700;">LÍNEAS DE PRODUCTO</h2>
+      </div>
+
+      <div class="categories-grid">
+        
+        <!-- REMERAS -->
+        <a href="productos.html?tipo=remeras" class="category-tile">
+          <div class="category-tile-header">
+            <div class="category-icon-bubble">
+              <!-- T-Shirt SVG icon -->
+              <svg class="icon-svg" viewBox="0 0 24 24">
+                <path d="M20.38 3.46L16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z"></path>
+              </svg>
+            </div>
+            <svg class="icon-svg category-arrow-icon" style="width:16px;height:16px;" viewBox="0 0 24 24">
+              <line x1="7" y1="17" x2="17" y2="7"></line>
+              <polyline points="7 7 17 7 17 17"></polyline>
+            </svg>
+          </div>
+          <div>
+            <div class="category-tile-name">REMERAS</div>
+            <div class="category-tile-meta font-ui">
+              <span>Boxy fit 240 GSM</span>
+              <span>Línea 01</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- MALLAS & SHORTS -->
+        <a href="productos.html?tipo=mallas" class="category-tile">
+          <div class="category-tile-header">
+            <div class="category-icon-bubble">
+              <!-- Shorts / Swimwear SVG icon -->
+              <svg class="icon-svg" viewBox="0 0 24 24">
+                <path d="M4 4h16l-1 12-4-2-3 4-3-4-4 2L4 4z"></path>
+                <line x1="12" y1="4" x2="12" y2="10"></line>
+              </svg>
+            </div>
+            <svg class="icon-svg category-arrow-icon" style="width:16px;height:16px;" viewBox="0 0 24 24">
+              <line x1="7" y1="17" x2="17" y2="7"></line>
+              <polyline points="7 7 17 7 17 17"></polyline>
+            </svg>
+          </div>
+          <div>
+            <div class="category-tile-name">MALLAS</div>
+            <div class="category-tile-meta font-ui">
+              <span>Boardshorts ripstop</span>
+              <span>Línea 02</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- BUZOS -->
+        <a href="productos.html?tipo=buzos" class="category-tile">
+          <div class="category-tile-header">
+            <div class="category-icon-bubble">
+              <!-- Hoodie / Sweatshirt SVG icon -->
+              <svg class="icon-svg" viewBox="0 0 24 24">
+                <path d="M9 3h6l3 7-2 1-2-4v13H10V7L8 11 6 10l3-7z"></path>
+                <circle cx="12" cy="7" r="2"></circle>
+              </svg>
+            </div>
+            <svg class="icon-svg category-arrow-icon" style="width:16px;height:16px;" viewBox="0 0 24 24">
+              <line x1="7" y1="17" x2="17" y2="7"></line>
+              <polyline points="7 7 17 7 17 17"></polyline>
+            </svg>
+          </div>
+          <div>
+            <div class="category-tile-name">BUZOS</div>
+            <div class="category-tile-meta font-ui">
+              <span>Frisa pesada 450 GSM</span>
+              <span>Línea 03</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- GORRAS -->
+        <a href="productos.html?tipo=gorras" class="category-tile">
+          <div class="category-tile-header">
+            <div class="category-icon-bubble">
+              <!-- Cap / Hat SVG icon -->
+              <svg class="icon-svg" viewBox="0 0 24 24">
+                <path d="M6 14a6 6 0 0 1 12 0H6z"></path>
+                <path d="M18 14h4a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-1a1 1 0 0 1 1-1h2"></path>
+                <circle cx="12" cy="8" r="1"></circle>
+              </svg>
+            </div>
+            <svg class="icon-svg category-arrow-icon" style="width:16px;height:16px;" viewBox="0 0 24 24">
+              <line x1="7" y1="17" x2="17" y2="7"></line>
+              <polyline points="7 7 17 7 17 17"></polyline>
+            </svg>
+          </div>
+          <div>
+            <div class="category-tile-name">GORRAS</div>
+            <div class="category-tile-meta font-ui">
+              <span>Sarga estructurada</span>
+              <span>Línea 04</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- LENTES -->
+        <a href="productos.html?tipo=lentes" class="category-tile">
+          <div class="category-tile-header">
+            <div class="category-icon-bubble">
+              <!-- Glasses / Sunglasses SVG icon -->
+              <svg class="icon-svg" viewBox="0 0 24 24">
+                <circle cx="6" cy="14" r="4"></circle>
+                <circle cx="18" cy="14" r="4"></circle>
+                <line x1="10" y1="14" x2="14" y2="14"></line>
+                <path d="M6 10L3 6"></path>
+                <path d="M18 10l3-4"></path>
+              </svg>
+            </div>
+            <svg class="icon-svg category-arrow-icon" style="width:16px;height:16px;" viewBox="0 0 24 24">
+              <line x1="7" y1="17" x2="17" y2="7"></line>
+              <polyline points="7 7 17 7 17 17"></polyline>
+            </svg>
+          </div>
+          <div>
+            <div class="category-tile-name">LENTES</div>
+            <div class="category-tile-meta font-ui">
+              <span>Envolventes UV400</span>
+              <span>Línea 05</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- MATES -->
+        <a href="productos.html?tipo=mates" class="category-tile">
+          <div class="category-tile-header">
+            <div class="category-icon-bubble">
+              <!-- Mate cup SVG icon -->
+              <svg class="icon-svg" viewBox="0 0 24 24">
+                <path d="M7 8h10l-1.5 10a4 4 0 0 1-4 3.5h-1a4 4 0 0 1-4-3.5L5 8h2z"></path>
+                <line x1="15" y1="3" x2="11" y2="11"></line>
+              </svg>
+            </div>
+            <svg class="icon-svg category-arrow-icon" style="width:16px;height:16px;" viewBox="0 0 24 24">
+              <line x1="7" y1="17" x2="17" y2="7"></line>
+              <polyline points="7 7 17 7 17 17"></polyline>
+            </svg>
+          </div>
+          <div>
+            <div class="category-tile-name">MATES</div>
+            <div class="category-tile-meta font-ui">
+              <span>Acero 304 térmico</span>
+              <span>Línea 06</span>
+            </div>
+          </div>
+        </a>
+
+      </div>
+    </section>
+
+    <!-- SECTION: CONTACTO DIRECTO -->
+    <section class="editorial-dossier-wrap" id="contacto">
+      <div style="max-width:1480px; margin:0 auto;">
+        <div style="margin-bottom: 2.5rem;">
+          <span class="font-ui" style="font-size:0.72rem; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.1em; display:block; margin-bottom:0.3rem;">CANALES OFICIALES</span>
+          <h2 class="font-editorial" style="font-size: 2.2rem; font-weight:700;">CONTACTO & ATENCIÓN</h2>
+          <p class="font-ui" style="color:var(--text-secondary); margin-top:0.4rem; max-width:600px;">
+            Atención personalizada de lunes a sábados desde Tres Arroyos. Consultas sobre pedidos, talles y despachos.
+          </p>
+        </div>
+
+        <div class="editorial-dossier-grid">
+          
+          <!-- INSTAGRAM -->
+          <div class="dossier-card" style="background:#0a0a0a; border:1px solid #1f1f1f; padding:2rem;">
+            <h4>
+              <svg class="icon-svg" viewBox="0 0 24 24">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+              </svg>
+              <span>INSTAGRAM OFICIAL</span>
+            </h4>
+            <p style="margin-bottom: 1.5rem;">
+              Seguí las novedades de los drops, archivo visual y backstage de fabricación.
+            </p>
+            <a href="https://instagram.com/blackout.ar" target="_blank" rel="noopener" class="btn-modern font-ui" style="width:100%;">
+              <span>@blackout.ar</span>
+              <svg class="icon-svg" style="width:14px;height:14px;" viewBox="0 0 24 24">
+                <line x1="7" y1="17" x2="17" y2="7"></line>
+                <polyline points="7 7 17 7 17 17"></polyline>
+              </svg>
+            </a>
+          </div>
+
+          <!-- WHATSAPP -->
+          <div class="dossier-card" style="background:#0a0a0a; border:1px solid #1f1f1f; padding:2rem;">
+            <h4>
+              <svg class="icon-svg" viewBox="0 0 24 24">
+                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+              </svg>
+              <span>WHATSAPP DIRECTO</span>
+            </h4>
+            <p style="margin-bottom: 1.5rem;">
+              Canal directo de consultas comerciales, asesoramiento de medidas y seguimiento.
+            </p>
+            <a href="https://wa.me/5492983554433" target="_blank" rel="noopener" class="btn-modern btn-modern-solid font-ui" style="width:100%;">
+              <span>+54 9 2983 55-4433</span>
+              <svg class="icon-svg" style="width:14px;height:14px;" viewBox="0 0 24 24">
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </a>
+          </div>
+
+          <!-- UBICACIÓN & ENVÍOS -->
+          <div class="dossier-card" style="background:#0a0a0a; border:1px solid #1f1f1f; padding:2rem;">
+            <h4>
+              <svg class="icon-svg" viewBox="0 0 24 24">
+                <path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8z"></path>
+                <circle cx="12" cy="10" r="3"></circle>
+              </svg>
+              <span>TRES ARROYOS // AR</span>
+            </h4>
+            <p style="margin-bottom: 1.5rem;">
+              Despacho y confección desde Tres Arroyos hacia toda la Argentina vía Correo y Andreani.
+            </p>
+            <div class="font-ui" style="font-size:0.8rem; color:var(--text-secondary); border-top:1px solid #222; padding-top:1rem;">
+              Email: ops@blackout.ar<br>
+              Horarios: Lun a Sáb 10:00 - 20:00 hs
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- PRODUCT DETAIL MODAL (3 A 4 VISTAS Y FICHA TÉCNICA) -->
+  <div id="productDetailModal" class="product-detail-modal" role="dialog" aria-modal="true">
+    <div class="product-detail-box" id="productDetailBox">
+      <!-- Injected dynamically by app.js -->
+    </div>
+  </div>
+
+  <!-- CART SLIDE-OUT DRAWER -->
+  <div id="cartBackdrop" class="cart-backdrop"></div>
+  <aside id="cartDrawer" class="cart-drawer" role="dialog" aria-modal="true" aria-labelledby="cartDrawerTitle">
+    <div class="cart-header">
+      <h2 id="cartDrawerTitle" class="cart-title">CARRITO DE COMPRAS</h2>
+      <button id="cartCloseBtn" class="cart-close-btn" aria-label="Cerrar carrito">
+        <svg class="icon-svg" viewBox="0 0 24 24">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <div id="cartItemsList" class="cart-items-container font-ui">
+      <!-- Injected reactively by app.js -->
+    </div>
+
+    <div class="cart-footer font-ui">
+      <div class="cart-summary-line">
+        <span class="cart-summary-label">Subtotal estimado:</span>
+        <span id="cartSubtotal" class="cart-summary-amount price-tag">$0 ARS</span>
+      </div>
+      <div class="cart-shipping-notice">
+        Envíos asegurados a toda la República Argentina vía Correo / Andreani. Despacho en 24hs hábiles.
+      </div>
+      <button id="checkoutBtn" class="checkout-btn">
+        <span>FINALIZAR COMPRA</span>
+        <svg class="icon-svg" style="width:16px;height:16px;" viewBox="0 0 24 24">
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+          <polyline points="12 5 19 12 12 19"></polyline>
+        </svg>
+      </button>
+    </div>
+  </aside>
+
+  <!-- CHECKOUT MODAL -->
+  <div id="checkoutModal" class="modal-overlay" role="dialog" aria-modal="true">
+    <div class="modal-box font-ui">
+      <button id="checkoutModalClose" class="modal-close-corner" aria-label="Cerrar ventana">
+        <svg class="icon-svg" viewBox="0 0 24 24">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+      <div style="font-size: 0.72rem; color: #888; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.4rem;">PAGO SEGURO // MERCADO PAGO</div>
+      <h3 class="font-editorial" style="font-size: 1.5rem; font-weight: 700; margin-bottom: 1.25rem;">RESUMEN DEL CARRITO</h3>
+      
+      <div id="checkoutSummaryList" style="margin-bottom: 1.5rem; max-height: 200px; overflow-y: auto;">
+        <!-- Injected dynamically -->
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:baseline; padding-top: 1rem; border-top: 1px solid #2b2b2b; margin-bottom: 1.5rem;">
+        <span style="font-size: 0.85rem; color: #999;">Total final:</span>
+        <span id="checkoutModalTotal" class="price-tag" style="font-size: 1.3rem;">$0 ARS</span>
+      </div>
+
+      <div style="background: #0f0f0f; padding: 14px; border: 1px solid #1f1f1f; font-size: 0.78rem; color: #888; margin-bottom: 1.5rem; line-height: 1.4;">
+        Conexión con pasarela de Mercado Pago (Tarjetas, saldo en cuenta, débito o cuotas).
+      </div>
+
+      <button id="proceedMercadoPagoBtn" class="checkout-btn" style="background:#ffffff; color:#000000; font-weight:700;">
+        <span>PAGAR CON MERCADO PAGO</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- MINIMAL FOOTER -->
+  <footer class="footer-colophon">
+    <div class="footer-container">
+      <div class="footer-bottom-bar font-ui">
+        <span>© 2026 BLACKOUT. UN PROYECTO NACIDO EN TRES ARROYOS.</span>
+        <span>INSTAGRAM: @BLACKOUT.AR &nbsp;•&nbsp; WHATSAPP: +54 9 2983 55-4433</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
+
+
+
