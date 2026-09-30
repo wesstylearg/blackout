@@ -10,7 +10,7 @@
   'use strict';
 
   // AUTO-PURGA DE CACHÉ SEGURA (Diferida para no interrumpir peticiones en vuelo)
-  const BH_BUILD_VERSION = '2026.09.30.4_V7';
+  const BH_BUILD_VERSION = '2026.09.30.5_V8';
   if (typeof window !== 'undefined') {
     window.addEventListener('load', function () {
       setTimeout(function () {
@@ -206,6 +206,81 @@
   const orderCustomerPostal = document.getElementById('orderCustomerPostal');
   const orderCustomerNotes = document.getElementById('orderCustomerNotes');
   let currentOrderId = '';
+
+  // DOM CALCULADOR DE ENVÍO (CORREO ARGENTINO)
+  const toggleShippingCalcBtn = document.getElementById('toggleShippingCalcBtn');
+  const shippingCalcBody = document.getElementById('shippingCalcBody');
+  const shippingPostalInput = document.getElementById('shippingPostalInput');
+  const shippingCalculateBtn = document.getElementById('shippingCalculateBtn');
+  const shippingFeedbackMsg = document.getElementById('shippingFeedbackMsg');
+  const shippingOptionsContainer = document.getElementById('shippingOptionsContainer');
+  const cartShippingSummaryLine = document.getElementById('cartShippingSummaryLine');
+  const cartShippingSelectedLabel = document.getElementById('cartShippingSelectedLabel');
+  const cartShippingAmount = document.getElementById('cartShippingAmount');
+  const cartTotalFinal = document.getElementById('cartTotalFinal');
+  const checkoutBtnLabel = document.getElementById('checkoutBtnLabel');
+  const shippingToggleText = document.getElementById('shippingToggleText');
+  const cartShippingCalcWrap = document.getElementById('cartShippingCalcWrap');
+
+  let selectedShippingMethod = null;
+  let currentDestinationPostal = '';
+
+  // ==========================================
+  // TARIFARIO CORREO ARGENTINO (PAQ.AR)
+  // Base de despacho: Tres Arroyos (CP 7500)
+  // ==========================================
+  const CORREO_TARIFAS = {
+    local: {
+      zoneName: 'Tres Arroyos (Local)',
+      rates: [
+        { id: 'ca_local_pickup', name: 'Retiro en Tres Arroyos', type: 'Punto de entrega oficial', price: 0, days: 'A coordinar', badge: 'GRATIS', badgeClass: 'badge-gratis' },
+        { id: 'ca_local_dom', name: 'Envío local a Domicilio', type: 'Cadetería / Mensajería', price: 3500, days: '24hs hábiles', badge: 'LOCAL', badgeClass: 'badge-estandar' }
+      ]
+    },
+    zona1: {
+      zoneName: 'Buenos Aires & CABA',
+      rates: [
+        { id: 'ca_clasico_suc_z1', name: 'Correo Clásico (Sucursal)', type: 'A Sucursal Correo Argentino', price: 5800, days: '3 a 6 días hábiles', badge: 'MÁS ECONÓMICO', badgeClass: 'badge-economico' },
+        { id: 'ca_clasico_dom_z1', name: 'Correo Clásico (Domicilio)', type: 'A Domicilio estándar', price: 7400, days: '3 a 6 días hábiles', badge: 'ESTÁNDAR', badgeClass: 'badge-estandar' },
+        { id: 'ca_expreso_dom_z1', name: 'Correo Expreso (Domicilio)', type: 'A Domicilio prioritario', price: 9800, days: '24 a 72 hs hábiles', badge: 'RÁPIDO', badgeClass: 'badge-rapido' }
+      ]
+    },
+    zona2: {
+      zoneName: 'Centro, Litoral & Cuyo',
+      rates: [
+        { id: 'ca_clasico_suc_z2', name: 'Correo Clásico (Sucursal)', type: 'A Sucursal Correo Argentino', price: 6800, days: '3 a 6 días hábiles', badge: 'MÁS ECONÓMICO', badgeClass: 'badge-economico' },
+        { id: 'ca_clasico_dom_z2', name: 'Correo Clásico (Domicilio)', type: 'A Domicilio estándar', price: 8600, days: '3 a 6 días hábiles', badge: 'ESTÁNDAR', badgeClass: 'badge-estandar' },
+        { id: 'ca_expreso_dom_z2', name: 'Correo Expreso (Domicilio)', type: 'A Domicilio prioritario', price: 11200, days: '24 a 72 hs hábiles', badge: 'RÁPIDO', badgeClass: 'badge-rapido' }
+      ]
+    },
+    zona3: {
+      zoneName: 'Patagonia & Norte Argentino',
+      rates: [
+        { id: 'ca_clasico_suc_z3', name: 'Correo Clásico (Sucursal)', type: 'A Sucursal Correo Argentino', price: 7900, days: '4 a 7 días hábiles', badge: 'MÁS ECONÓMICO', badgeClass: 'badge-economico' },
+        { id: 'ca_clasico_dom_z3', name: 'Correo Clásico (Domicilio)', type: 'A Domicilio estándar', price: 9900, days: '4 a 7 días hábiles', badge: 'ESTÁNDAR', badgeClass: 'badge-estandar' },
+        { id: 'ca_expreso_dom_z3', name: 'Correo Expreso (Domicilio)', type: 'A Domicilio prioritario', price: 12900, days: '24 a 72 hs hábiles', badge: 'RÁPIDO', badgeClass: 'badge-rapido' }
+      ]
+    }
+  };
+
+  function getShippingZoneByPostal(cp) {
+    if (!cp) return null;
+    const clean = String(cp).trim().toUpperCase();
+    const match = clean.match(/\d{4}/);
+    if (!match) return null;
+    const num = parseInt(match[0], 10);
+
+    if (num === 7500) {
+      return CORREO_TARIFAS.local;
+    }
+    if ((num >= 1000 && num <= 2999) || (num >= 6000 && num <= 8999)) {
+      return CORREO_TARIFAS.zona1;
+    }
+    if ((num >= 3000 && num <= 3999) || (num >= 5000 && num <= 5999)) {
+      return CORREO_TARIFAS.zona2;
+    }
+    return CORREO_TARIFAS.zona3;
+  }
 
   // CATALOG DOM
   const productsCatalogGrid = document.getElementById('productsCatalogGrid');
@@ -903,6 +978,20 @@
     if (!cartItemsList) return;
 
     if (cart.length === 0) {
+      selectedShippingMethod = null;
+      currentDestinationPostal = '';
+      if (cartShippingSummaryLine) cartShippingSummaryLine.style.display = 'none';
+      if (cartShippingCalcWrap) cartShippingCalcWrap.classList.remove('has-selection');
+      if (shippingOptionsContainer) {
+        shippingOptionsContainer.style.display = 'none';
+        shippingOptionsContainer.innerHTML = '';
+      }
+      if (shippingFeedbackMsg) shippingFeedbackMsg.style.display = 'none';
+      if (shippingPostalInput) shippingPostalInput.value = '';
+      if (shippingToggleText) shippingToggleText.textContent = 'Calcular costo de envío';
+      if (cartTotalFinal) cartTotalFinal.textContent = '$0 ARS';
+      if (checkoutBtnLabel) checkoutBtnLabel.textContent = 'COORDINAR COMPRA';
+
       cartItemsList.innerHTML = `
         <div class="cart-empty-state font-ui">
           <svg class="icon-svg" style="width:36px;height:36px;opacity:0.3;margin-bottom:1rem;" viewBox="0 0 24 24">
@@ -962,6 +1051,34 @@
 
     if (cartSubtotalEl) {
       cartSubtotalEl.textContent = formatARS(subtotal) + ' ARS';
+    }
+
+    // CÁLCULO DE ENVÍO Y TOTAL
+    const shippingPrice = selectedShippingMethod ? selectedShippingMethod.price : 0;
+    const finalTotal = subtotal + shippingPrice;
+
+    if (cartShippingSummaryLine) {
+      if (selectedShippingMethod) {
+        cartShippingSummaryLine.style.display = 'flex';
+        if (cartShippingSelectedLabel) {
+          cartShippingSelectedLabel.textContent = `Envío (${selectedShippingMethod.name}):`;
+        }
+        if (cartShippingAmount) {
+          cartShippingAmount.textContent = selectedShippingMethod.price === 0 ? 'GRATIS' : formatARS(selectedShippingMethod.price) + ' ARS';
+        }
+      } else {
+        cartShippingSummaryLine.style.display = 'none';
+      }
+    }
+
+    if (cartTotalFinal) {
+      cartTotalFinal.textContent = formatARS(finalTotal) + ' ARS';
+    }
+
+    if (checkoutBtnLabel) {
+      checkoutBtnLabel.textContent = selectedShippingMethod
+        ? `COORDINAR COMPRA (${formatARS(finalTotal)})`
+        : `COORDINAR COMPRA (${formatARS(subtotal)})`;
     }
   }
 
@@ -1073,6 +1190,117 @@
     return 'BH-' + code;
   }
 
+  // ==========================================
+  // CONTROLADOR DEL CALCULADOR DE ENVÍO
+  // ==========================================
+  function initShippingCalculator() {
+    if (toggleShippingCalcBtn && shippingCalcBody) {
+      toggleShippingCalcBtn.addEventListener('click', () => {
+        const isClosed = shippingCalcBody.style.display === 'none';
+        shippingCalcBody.style.display = isClosed ? 'block' : 'none';
+        toggleShippingCalcBtn.classList.toggle('is-open', isClosed);
+        toggleShippingCalcBtn.setAttribute('aria-expanded', String(isClosed));
+        if (isClosed && shippingPostalInput) {
+          shippingPostalInput.focus();
+        }
+      });
+    }
+
+    if (shippingCalculateBtn) {
+      shippingCalculateBtn.addEventListener('click', handleCalculateShipping);
+    }
+
+    if (shippingPostalInput) {
+      shippingPostalInput.addEventListener('keydown', e => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          handleCalculateShipping();
+        }
+      });
+    }
+  }
+
+  function handleCalculateShipping() {
+    if (!shippingPostalInput) return;
+    const rawVal = shippingPostalInput.value.trim();
+    if (!rawVal) {
+      showShippingFeedback('Por favor, ingresá un código postal de 4 dígitos (ej: 7500).', 'error');
+      return;
+    }
+
+    const zone = getShippingZoneByPostal(rawVal);
+    if (!zone) {
+      showShippingFeedback('Código postal no reconocido. Ingresá 4 números (ej: 7500 o 1414).', 'error');
+      return;
+    }
+
+    currentDestinationPostal = rawVal.replace(/\D/g, '').slice(0, 4) || rawVal;
+    showShippingFeedback(`Destino: <strong>${zone.zoneName}</strong>`, 'success');
+    renderShippingOptions(zone.rates);
+  }
+
+  function showShippingFeedback(html, type) {
+    if (!shippingFeedbackMsg) return;
+    shippingFeedbackMsg.innerHTML = html;
+    shippingFeedbackMsg.className = `shipping-feedback-msg is-${type}`;
+    shippingFeedbackMsg.style.display = 'block';
+  }
+
+  function renderShippingOptions(rates) {
+    if (!shippingOptionsContainer) return;
+    shippingOptionsContainer.innerHTML = rates.map(rate => {
+      const isSelected = selectedShippingMethod && selectedShippingMethod.id === rate.id;
+      return `
+        <div class="shipping-option-card ${isSelected ? 'active' : ''}" data-rate-id="${rate.id}" onclick="window.selectShippingRate('${rate.id}')">
+          <div class="shipping-option-left">
+            <div class="shipping-option-title-row">
+              <span class="shipping-option-name">${rate.name}</span>
+              ${rate.badge ? `<span class="shipping-option-badge ${rate.badgeClass}">${rate.badge}</span>` : ''}
+            </div>
+            <span class="shipping-option-days">${rate.days} • ${rate.type}</span>
+          </div>
+          <div class="shipping-option-right">
+            <span class="shipping-option-price">${rate.price === 0 ? 'GRATIS' : formatARS(rate.price)}</span>
+            <div class="shipping-option-radio">
+              <span class="shipping-option-radio-dot"></span>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
+    shippingOptionsContainer.style.display = 'flex';
+  }
+
+  window.selectShippingRate = function (rateId) {
+    let foundRate = null;
+    for (const key in CORREO_TARIFAS) {
+      const r = CORREO_TARIFAS[key].rates.find(item => item.id === rateId);
+      if (r) {
+        foundRate = r;
+        break;
+      }
+    }
+    if (!foundRate) return;
+
+    selectedShippingMethod = foundRate;
+
+    // Actualizar visual en las opciones
+    document.querySelectorAll('.shipping-option-card').forEach(card => {
+      const id = card.getAttribute('data-rate-id');
+      card.classList.toggle('active', id === rateId);
+    });
+
+    if (cartShippingCalcWrap) {
+      cartShippingCalcWrap.classList.add('has-selection');
+    }
+
+    if (shippingToggleText) {
+      shippingToggleText.innerHTML = `Envío: <strong>${foundRate.name}</strong> (${foundRate.price === 0 ? 'GRATIS' : formatARS(foundRate.price)})`;
+    }
+
+    updateCartUI();
+  };
+
   function openCheckoutModal() {
     if (cart.length === 0) return;
     closeCart();
@@ -1082,23 +1310,44 @@
       checkoutOrderIdBadge.textContent = '#' + currentOrderId;
     }
 
-    let total = 0;
-    if (checkoutSummaryList) {
-      checkoutSummaryList.innerHTML = cart.map(item => {
-        const lineTotal = item.price * item.qty;
-        total += lineTotal;
-        return `
-          <div style="display:flex; justify-content:space-between; align-items:center; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 0.8rem;">
-            <div style="text-align: left;">
-              <span style="font-weight: 600; color: #fff;">${item.qty}x ${item.name}</span>
-              <span style="display: block; font-size: 0.7rem; color: var(--text-dim); margin-top: 1px;">Talle: <strong style="color: var(--violet-light);">${item.size}</strong> • Unitario: ${formatARS(item.price)}</span>
-            </div>
-            <span class="price-tag" style="font-size: 0.85rem; font-weight: 700; color: #fff;">${formatARS(lineTotal)}</span>
-          </div>
-        `;
-      }).join('');
+    // Auto-completar CP en formulario si ya se calculó en el carrito
+    if (orderCustomerPostal && currentDestinationPostal && !orderCustomerPostal.value) {
+      orderCustomerPostal.value = currentDestinationPostal;
     }
 
+    let subtotal = 0;
+    let itemsHtml = cart.map(item => {
+      const lineTotal = item.price * item.qty;
+      subtotal += lineTotal;
+      return `
+        <div style="display:flex; justify-content:space-between; align-items:center; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-size: 0.8rem;">
+          <div style="text-align: left;">
+            <span style="font-weight: 600; color: #fff;">${item.qty}x ${item.name}</span>
+            <span style="display: block; font-size: 0.7rem; color: var(--text-dim); margin-top: 1px;">Talle: <strong style="color: var(--violet-light);">${item.size}</strong> • Unitario: ${formatARS(item.price)}</span>
+          </div>
+          <span class="price-tag" style="font-size: 0.85rem; font-weight: 700; color: #fff;">${formatARS(lineTotal)}</span>
+        </div>
+      `;
+    }).join('');
+
+    const shippingPrice = selectedShippingMethod ? selectedShippingMethod.price : 0;
+    if (selectedShippingMethod) {
+      itemsHtml += `
+        <div style="display:flex; justify-content:space-between; align-items:center; padding: 8px 10px; border: 1px solid rgba(136,80,201,0.25); font-size: 0.8rem; background: rgba(136,80,201,0.08); border-radius: 4px; margin-top: 6px;">
+          <div style="text-align: left;">
+            <span style="font-weight: 700; color: var(--violet-light);">📦 ${selectedShippingMethod.name}</span>
+            <span style="display: block; font-size: 0.7rem; color: var(--text-dim);">${selectedShippingMethod.days} • CP ${currentDestinationPostal}</span>
+          </div>
+          <span class="price-tag" style="font-size: 0.85rem; font-weight: 700; color: #fff;">${selectedShippingMethod.price === 0 ? 'GRATIS' : formatARS(selectedShippingMethod.price)}</span>
+        </div>
+      `;
+    }
+
+    if (checkoutSummaryList) {
+      checkoutSummaryList.innerHTML = itemsHtml;
+    }
+
+    const total = subtotal + shippingPrice;
     if (checkoutModalTotal) {
       checkoutModalTotal.textContent = formatARS(total) + ' ARS';
     }
@@ -1143,13 +1392,23 @@
       return;
     }
 
-    let total = 0;
+    let subtotal = 0;
     const itemsLines = cart.map(item => {
       const lineTotal = item.price * item.qty;
-      total += lineTotal;
+      subtotal += lineTotal;
       const refCode = item.ref || item.id;
       return `• ${item.qty}x ${item.name} [Ref: ${refCode}] (Talle: ${item.size}) — ${formatARS(lineTotal)}`;
     }).join('\n');
+
+    const shippingPrice = selectedShippingMethod ? selectedShippingMethod.price : 0;
+    const total = subtotal + shippingPrice;
+
+    let shippingDetailText = '';
+    if (selectedShippingMethod) {
+      shippingDetailText = `\n*ENVÍO CORREO ARGENTINO:*\n• *Modalidad:* ${selectedShippingMethod.name}\n• *Costo de envío:* ${selectedShippingMethod.price === 0 ? 'GRATIS' : formatARS(selectedShippingMethod.price) + ' ARS'}\n• *Plazo:* ${selectedShippingMethod.days}\n• *CP Destino:* ${postal}`;
+    } else {
+      shippingDetailText = `\n*ENVÍO:* A coordinar con el vendedor (CP: ${postal})`;
+    }
 
     const message = 
 `*NUEVO PEDIDO BLACKHAZE* — #${currentOrderId}
@@ -1160,12 +1419,13 @@
 • *Email:* ${email}
 • *CP / Localidad:* ${postal}
 ${notes ? `• *Aclaraciones:* ${notes}\n` : ''}
-*DETALLE DEL PEDIDO:*
+*DETALLE DE PRENDAS:*
 ${itemsLines}
+${shippingDetailText}
 
 *TOTAL A ABONAR:* ${formatARS(total)} ARS
 ──────────────────────────
-¡Hola! Acabo de armar este pedido en la web. ¿Cómo coordinamos el pago y el envío?`;
+¡Hola! Acabo de armar este pedido en la web con envío Correo Argentino. ¿Cómo coordinamos el pago por transferencia / link?`;
 
     const waUrl = `https://wa.me/${WHATSAPP_PHONE}?text=${encodeURIComponent(message)}`;
 
@@ -1188,8 +1448,11 @@ ${itemsLines}
               origin: 'TIENDA ONLINE',
               payment_method: 'WHATSAPP / A COORDINAR',
               status: 'PENDIENTE',
+              subtotal: subtotal,
+              shipping_cost: shippingPrice,
+              shipping_method: selectedShippingMethod ? selectedShippingMethod.name : 'A COORDINAR',
               total: total,
-              notes: notes || 'Pedido web coordinado por WhatsApp',
+              notes: notes || 'Pedido web con envío Correo Argentino',
               items: cart.map(i => ({
                 product_id: i.id,
                 product_name: i.name,
@@ -1201,17 +1464,17 @@ ${itemsLines}
             });
             db.collection('blackhaze_store').doc('main_data').update({ sales });
           }
-        }).catch(err => console.warn('[BH] Error registrando venta:', err));
+        }).catch(() => {});
       }
-    } catch (e) {
-      console.warn('[BH] Firestore no disponible:', e);
-    }
+    } catch (e) {}
 
     // Abrir WhatsApp
-    window.open(waUrl, '_blank');
+    window.open(waUrl, '_blank', 'noopener,noreferrer');
 
     // Limpiar carrito y cerrar modal
     cart = [];
+    selectedShippingMethod = null;
+    currentDestinationPostal = '';
     saveCart();
     closeCheckoutModal();
   }
@@ -1243,6 +1506,7 @@ ${itemsLines}
   // INIT
   function startApp() {
     initCart();
+    initShippingCalculator();
     initFirebaseStore();
     renderHomeDrop();
     renderProductsCatalog();
