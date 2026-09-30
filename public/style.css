@@ -22,6 +22,10 @@
   -webkit-tap-highlight-color: transparent; /* Quita el rectángulo celeste/azul en Android/Chrome */
 }
 
+a, button, a:hover, a:focus, a:active, button:hover, button:focus, button:active {
+  text-decoration: none !important;
+}
+
 :root {
   --bg-pure: #000000;
   --bg-subtle: #060409;
@@ -323,26 +327,9 @@ button {
   vertical-align: middle;
 }
 
-.nav-link::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0%;
-  height: 2px;
-  background: var(--violet-glow);
-  box-shadow: 0 0 8px var(--violet-neon);
-  transition: width 0.25s ease;
-  border-radius: 2px;
-}
-
 .nav-link:hover, .nav-link.active {
   color: #ffffff;
-  text-shadow: 0 0 6px rgba(168, 85, 247, 0.3);
-}
-
-.nav-link.active::after, .nav-link:hover::after {
-  width: 100%;
+  text-shadow: 0 0 10px rgba(168, 85, 247, 0.6);
 }
 
 .cart-toggle-btn {

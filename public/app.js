@@ -10,7 +10,7 @@
   'use strict';
 
   // AUTO-PURGA DE CACHÉ SEGURA (Diferida para no interrumpir peticiones en vuelo)
-  const BH_BUILD_VERSION = '2026.09.30.2_V5';
+  const BH_BUILD_VERSION = '2026.09.30.3_V6';
   if (typeof window !== 'undefined') {
     window.addEventListener('load', function () {
       setTimeout(function () {
@@ -339,7 +339,7 @@
     }
 
     const featuredProds = PRODUCTS.filter(p => p.featured);
-    const dropItems = (featuredProds.length > 0 ? featuredProds : PRODUCTS).slice(0, 4);
+    const dropItems = featuredProds.length > 0 ? featuredProds : PRODUCTS;
 
     homeDropGrid.innerHTML = dropItems.map(renderProductCard).join('');
     bindSizeSelectors();
