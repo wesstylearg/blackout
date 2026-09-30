@@ -1857,255 +1857,37 @@ button {
 }
 
 /* ==========================================================================
-   SHIPPING CALCULATOR — CORREO ARGENTINO (PAQ.AR)
+   ENVÍOS A TODO EL PAÍS (COORDINACIÓN POR WHATSAPP)
    ========================================================================== */
-.cart-shipping-calc-wrap {
-  margin: 0.75rem 0;
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-sm);
-  background: rgba(136, 80, 201, 0.04);
-  overflow: hidden;
-  transition: border-color 0.25s ease;
-}
-
-.cart-shipping-calc-wrap:focus-within,
-.cart-shipping-calc-wrap.has-selection {
-  border-color: rgba(168, 85, 247, 0.4);
-}
-
-.shipping-calc-toggle-btn {
-  width: 100%;
-  padding: 10px 14px;
-  background: transparent;
-  border: none;
-  color: var(--text-secondary);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  cursor: pointer;
-  font-family: var(--font-ui);
-  font-size: 0.8rem;
-  font-weight: 600;
-  transition: all 0.2s ease;
-}
-
-.shipping-calc-toggle-btn:hover {
-  color: #ffffff;
+.cart-shipping-badge-box {
+  margin: 0.85rem 0;
+  padding: 12px 14px;
   background: rgba(136, 80, 201, 0.08);
-}
-
-.shipping-toggle-title {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.shipping-toggle-arrow {
-  color: var(--text-dim);
-  transition: transform 0.25s ease;
-}
-
-.shipping-calc-toggle-btn.is-open .shipping-toggle-arrow {
-  transform: rotate(180deg);
-  color: var(--violet-light);
-}
-
-.shipping-calc-body {
-  padding: 10px 14px 14px 14px;
-  border-top: 1px solid var(--border-subtle);
-  background: rgba(8, 3, 16, 0.6);
-}
-
-.shipping-input-row {
-  display: flex;
-  gap: 8px;
-}
-
-.shipping-postal-input {
-  flex: 1;
-  padding: 8px 12px;
-  background: #0d0618;
-  border: 1px solid var(--border-line);
-  border-radius: var(--radius-xs);
-  color: #ffffff;
-  font-family: var(--font-ui);
-  font-size: 0.8rem;
-  outline: none;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.shipping-postal-input:focus {
-  border-color: var(--violet-glow);
-  box-shadow: 0 0 8px rgba(168, 85, 247, 0.25);
-}
-
-.shipping-calculate-btn {
-  padding: 8px 14px;
-  background: var(--violet-electric);
-  color: #ffffff;
-  border: 1px solid var(--violet-glow);
-  border-radius: var(--radius-xs);
-  font-family: var(--font-ui);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-}
-
-.shipping-calculate-btn:hover {
-  background: var(--violet-glow);
-  box-shadow: 0 0 10px rgba(168, 85, 247, 0.4);
-}
-
-.shipping-feedback-msg {
-  font-size: 0.74rem;
-  color: var(--text-dim);
-  margin-top: 8px;
-  line-height: 1.35;
-}
-
-.shipping-feedback-msg.is-error {
-  color: #f87171;
-}
-
-.shipping-feedback-msg.is-success {
-  color: #34d399;
-}
-
-.shipping-options-container {
-  margin-top: 10px;
+  border: 1px solid rgba(168, 85, 247, 0.25);
+  border-radius: var(--radius-sm);
   display: flex;
   flex-direction: column;
+  gap: 5px;
+}
+
+.cart-shipping-badge-title {
+  display: flex;
+  align-items: center;
   gap: 8px;
-}
-
-.shipping-option-card {
-  padding: 10px 12px;
-  background: #0e071a;
-  border: 1px solid rgba(136, 80, 201, 0.2);
-  border-radius: var(--radius-xs);
-  cursor: pointer;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  user-select: none;
-}
-
-.shipping-option-card:hover {
-  border-color: rgba(168, 85, 247, 0.5);
-  background: rgba(136, 80, 201, 0.12);
-  transform: translateY(-1px);
-}
-
-.shipping-option-card.active {
-  border-color: var(--violet-glow);
-  background: rgba(136, 80, 201, 0.18);
-  box-shadow: 0 0 12px rgba(168, 85, 247, 0.25);
-}
-
-.shipping-option-left {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  text-align: left;
-}
-
-.shipping-option-title-row {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.shipping-option-name {
   font-size: 0.78rem;
   font-weight: 700;
   color: #ffffff;
-}
-
-.shipping-option-badge {
-  font-size: 0.62rem;
-  font-weight: 700;
-  padding: 1px 5px;
-  border-radius: 3px;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 
-.badge-economico {
-  background: rgba(34, 197, 94, 0.15);
-  color: #4ade80;
-  border: 1px solid rgba(34, 197, 94, 0.3);
-}
-
-.badge-rapido {
-  background: rgba(234, 179, 8, 0.15);
-  color: #facc15;
-  border: 1px solid rgba(234, 179, 8, 0.3);
-}
-
-.badge-gratis {
-  background: rgba(56, 189, 248, 0.15);
-  color: #38bdf8;
-  border: 1px solid rgba(56, 189, 248, 0.3);
-}
-
-.badge-estandar {
-  background: rgba(168, 85, 247, 0.15);
-  color: var(--violet-light);
-  border: 1px solid rgba(168, 85, 247, 0.3);
-}
-
-.shipping-option-days {
-  font-size: 0.69rem;
+.cart-shipping-badge-desc {
+  font-size: 0.74rem;
   color: var(--text-dim);
+  line-height: 1.4;
+  margin: 0;
 }
 
-.shipping-option-right {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.shipping-option-price {
-  font-family: var(--font-price);
-  font-size: 0.88rem;
-  font-weight: 700;
-  color: #ffffff;
-  white-space: nowrap;
-}
-
-.shipping-option-radio {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  border: 2px solid var(--border-line);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  transition: all 0.2s ease;
-}
-
-.shipping-option-card.active .shipping-option-radio {
-  border-color: var(--violet-glow);
-  background: var(--violet-glow);
-  box-shadow: 0 0 6px var(--violet-neon);
-}
-
-.shipping-option-radio-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #ffffff;
-  display: none;
-}
-
-.shipping-option-card.active .shipping-option-radio-dot {
-  display: block;
-}
 
 /* CHECKOUT MODAL */
 .modal-overlay {

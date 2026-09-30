@@ -30,7 +30,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://res.cloudinary.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Syne:wght@700;800&family=Space+Grotesk:wght@600;700&family=Space+Mono:wght@400;700&display=swap">
-  <link rel="stylesheet" href="style.css?v=3.7">
+  <link rel="stylesheet" href="style.css?v=3.8">
   <link rel="icon" type="image/svg+xml" href="assets/mascota.svg">
 </head>
 <body>
@@ -239,49 +239,30 @@
         <span id="cartSubtotal" class="cart-summary-amount price-tag">$0 ARS</span>
       </div>
 
-      <!-- SECCIÓN CALCULAR ENVÍO CORREO ARGENTINO -->
-      <div class="cart-shipping-calc-wrap" id="cartShippingCalcWrap">
-        <button type="button" id="toggleShippingCalcBtn" class="shipping-calc-toggle-btn" aria-expanded="false">
-          <span class="shipping-toggle-title">
-            <svg class="icon-svg" style="width:16px;height:16px;color:var(--violet-light);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="1" y="3" width="15" height="13"></rect>
-              <polygon points="16 8 20 8 23 11 23 16 16 16 8"></polygon>
-              <circle cx="5.5" cy="18.5" r="2.5"></circle>
-              <circle cx="18.5" cy="18.5" r="2.5"></circle>
-            </svg>
-            <span id="shippingToggleText">Calcular costo de envío</span>
-          </span>
-          <svg class="icon-svg shipping-toggle-arrow" id="shippingToggleArrow" style="width:14px;height:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="6 9 12 15 18 9"></polyline>
+      <!-- INFORMACIÓN DE ENVÍOS A TODO EL PAÍS -->
+      <div class="cart-shipping-badge-box">
+        <div class="cart-shipping-badge-title">
+          <svg class="icon-svg" style="width:16px;height:16px;color:var(--violet-light);flex-shrink:0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="1" y="3" width="15" height="13"></rect>
+            <polygon points="16 8 20 8 23 11 23 16 16 16 8"></polygon>
+            <circle cx="5.5" cy="18.5" r="2.5"></circle>
+            <circle cx="18.5" cy="18.5" r="2.5"></circle>
           </svg>
-        </button>
-
-        <div id="shippingCalcBody" class="shipping-calc-body" style="display:none;">
-          <div class="shipping-input-row">
-            <input type="text" id="shippingPostalInput" class="shipping-postal-input" placeholder="Tu Cód. Postal (ej: 7500)" maxlength="8" autocomplete="postal-code">
-            <button type="button" id="shippingCalculateBtn" class="shipping-calculate-btn">COTIZAR</button>
-          </div>
-          <div id="shippingFeedbackMsg" class="shipping-feedback-msg" style="display:none;"></div>
-          <div id="shippingOptionsContainer" class="shipping-options-container" style="display:none;">
-            <!-- Injected reactively by app.js (Clásico Sucursal, Clásico Domicilio, Expreso) -->
-          </div>
+          <span>ENVÍOS A TODO EL PAÍS</span>
         </div>
-      </div>
-
-      <!-- LÍNEA COSTO ENVÍO SELECCIONADO -->
-      <div id="cartShippingSummaryLine" class="cart-summary-line cart-shipping-line" style="display:none;">
-        <span class="cart-summary-label" id="cartShippingSelectedLabel">Envío:</span>
-        <span id="cartShippingAmount" class="cart-summary-amount price-tag" style="font-size:1.05rem;">$0 ARS</span>
+        <p class="cart-shipping-badge-desc">
+          El costo y método de entrega se coordina por WhatsApp al confirmar tu compra.
+        </p>
       </div>
 
       <!-- TOTAL FINAL -->
       <div class="cart-summary-line cart-total-line" style="border-top:1px dashed var(--border-subtle); padding-top:0.75rem; margin-top:0.25rem;">
-        <span class="cart-summary-label" style="font-weight:700; color:#ffffff;">TOTAL ESTIMADO:</span>
+        <span class="cart-summary-label" style="font-weight:700; color:#ffffff;">TOTAL:</span>
         <span id="cartTotalFinal" class="cart-summary-amount price-tag" style="font-size:1.25rem; color:#ffffff; font-weight:800;">$0 ARS</span>
       </div>
 
       <div class="cart-shipping-notice">
-        Despacho oficial de Correo Argentino desde Tres Arroyos con seguimiento online 24hs.
+        Envíos a todo el país • Coordinación directa e inmediata por WhatsApp
       </div>
 
       <button id="checkoutBtn" class="checkout-btn">
@@ -391,6 +372,6 @@
   <!-- Firebase SDK Compat (Direct Initialization) -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-  <script src="app.js?v=3.7"></script>
+  <script src="app.js?v=3.8"></script>
 </body>
 </html>
