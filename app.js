@@ -10,7 +10,7 @@
   'use strict';
 
   // AUTO-PURGA DE CACHÉ SEGURA (Diferida para no interrumpir peticiones en vuelo)
-  const BH_BUILD_VERSION = '2026.09.30.7_V9';
+  const BH_BUILD_VERSION = '2026.09.30.8_V10';
   if (typeof window !== 'undefined') {
     window.addEventListener('load', function () {
       setTimeout(function () {
@@ -599,6 +599,93 @@
   }
 
   // PRODUCT DETAIL MODAL (3 A 4 IMÁGENES Y MÁS DETALLES)
+  
+  function cleanMeasurementColumnName(name) {
+    const n = name.toLowerCase();
+    if (n.includes('largo')) return 'Largo';
+    if (n.includes('cintura plana')) return 'Cintura plana';
+    if (n.includes('contorno')) return 'Contorno aprox.';
+    return name;
+  }
+
+  function parseProductSpecs(rawSpecs) {
+    if (!Array.isArray(rawSpecs) || rawSpecs.length === 0) {
+      return { features: [], measurements: null };
+    }
+
+    const features = [];
+    const measurementCategories = [];
+    let currentCategory = null;
+
+    const ignoreRegex = /^(ficha t[eé]cnica|talles?:.*)$/i;
+
+    for (let rawLine of rawSpecs) {
+      const line = String(rawLine).trim();
+      if (!line || ignoreRegex.test(line)) continue;
+
+      if (line.endsWith(':') && !line.toLowerCase().startsWith('tipo:')) {
+        const colName = cleanMeasurementColumnName(line.replace(/:$/, '').trim());
+        currentCategory = {
+          name: colName,
+          values: {}
+        };
+        measurementCategories.push(currentCategory);
+        continue;
+      }
+
+      const sizeMatch = line.match(/^([SMLX|XL|XXL|U|0-9]+)\s*[:=-]\s*(.+)$/i);
+      if (sizeMatch && currentCategory) {
+        const sizeKey = sizeMatch[1].toUpperCase();
+        const val = sizeMatch[2].trim();
+        currentCategory.values[sizeKey] = val;
+        continue;
+      }
+
+      features.push(line);
+    }
+
+    let measurementsTable = null;
+    if (measurementCategories.length > 0) {
+      const allSizes = ['S', 'M', 'L', 'XL', 'XXL'];
+      const foundSizes = allSizes.filter(s => measurementCategories.some(cat => cat.values[s]));
+
+      if (foundSizes.length > 0) {
+        measurementsTable = {
+          columns: measurementCategories.map(cat => cat.name),
+          rows: foundSizes.map(size => {
+            const rowValues = {};
+            measurementCategories.forEach(cat => {
+              rowValues[cat.name] = cat.values[size] || '-';
+            });
+            return {
+              size,
+              values: rowValues
+            };
+          })
+        };
+      }
+    }
+
+    return { features, measurements: measurementsTable };
+  }
+
+  window.selectProductDetailSize = function (productId, size) {
+    const prod = PRODUCTS.find(p => p.id === productId);
+    if (!prod || !isSizeAvailable(prod, size)) return;
+
+    selectedSizes[productId] = size;
+
+    const detailBox = document.getElementById('productDetailBox');
+    if (detailBox) {
+      detailBox.querySelectorAll('.size-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-size') === size);
+      });
+      detailBox.querySelectorAll('.size-table-row').forEach(row => {
+        row.classList.toggle('is-active-size', row.getAttribute('data-size-row') === size);
+      });
+    }
+  };
+
   window.openProductDetail = function (productId) {
     const p = PRODUCTS.find(prod => prod.id === productId);
     if (!p || !productDetailModal || !productDetailBox) return;
@@ -618,15 +705,54 @@
       if (!hasStock) {
         return `<button class="size-btn out-of-stock" disabled title="Talle ${s} sin stock">${s}</button>`;
       }
-      return `<button class="size-btn ${s === activeSize ? 'active' : ''}" data-product="${p.id}" data-size="${s}">${s}</button>`;
+      return `<button class="size-btn ${s === activeSize ? 'active' : ''}" data-product="${p.id}" data-size="${s}" onclick="window.selectProductDetailSize('${p.id}', '${s}')">${s}</button>`;
     }).join('');
 
-    const specsHtml = p.specs.map(spec => `
-      <div class="spec-pill font-ui">
-        <span class="spec-pill-dot"></span>
-        <span>${spec}</span>
+    // Parseo inteligente de Ficha Técnica vs Tabla de Medidas
+    const parsedSpecs = parseProductSpecs(p.specs);
+
+    const specsHtml = parsedSpecs.features.length > 0 ? `
+      <div class="product-specs-section">
+        <span class="product-specs-title">Detalles de la prenda:</span>
+        <div class="product-specs-wrap">
+          ${parsedSpecs.features.map(feat => `
+            <div class="spec-pill font-ui">
+              <span class="spec-pill-dot"></span>
+              <span>${feat}</span>
+            </div>
+          `).join('')}
+        </div>
       </div>
-    `).join('');
+    ` : '';
+
+    const measurementsHtml = parsedSpecs.measurements ? `
+      <div class="product-measurements-section font-ui">
+        <div class="measurements-header">
+          <svg class="icon-svg" style="width:14px;height:14px;color:var(--violet-light);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+          </svg>
+          <span>Guía de Talles y Medidas (en cm)</span>
+        </div>
+        <div class="measurements-table-wrapper">
+          <table class="measurements-table">
+            <thead>
+              <tr>
+                <th>Talle</th>
+                ${parsedSpecs.measurements.columns.map(col => `<th>${col}</th>`).join('')}
+              </tr>
+            </thead>
+            <tbody>
+              ${parsedSpecs.measurements.rows.map(r => `
+                <tr class="size-table-row ${r.size === activeSize ? 'is-active-size' : ''}" data-size-row="${r.size}" onclick="window.selectProductDetailSize('${p.id}', '${r.size}')" title="Seleccionar talle ${r.size}">
+                  <td><span class="size-col-tag">${r.size}</span></td>
+                  ${parsedSpecs.measurements.columns.map(col => `<td>${r.values[col] || '-'}</td>`).join('')}
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    ` : '';
 
     const hasImages = p.images && p.images.length > 0;
     const hasMultipleImages = hasImages && p.images.length > 1;
@@ -698,22 +824,18 @@
 
       <div class="product-detail-info font-ui">
         <div>
-          <div style="font-size:0.72rem; color:var(--violet-light); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:0.4rem; font-weight:600;">${p.typeName.toUpperCase()}</div>
-          <h2 class="font-editorial" style="font-size: 1.85rem; font-weight: 700; line-height: 1.15; margin-bottom: 0.6rem;">${p.name}</h2>
-          <div class="price-tag" style="font-size: 1.5rem; color: #ffffff; margin-bottom: 1.25rem;">${formatARS(p.price)} ARS</div>
+          <div style="font-size:0.72rem; color:var(--violet-light); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:0.35rem; font-weight:600;">${p.typeName.toUpperCase()}</div>
+          <h2 class="font-editorial" style="font-size: 1.85rem; font-weight: 700; line-height: 1.15; margin-bottom: 0.5rem;">${p.name}</h2>
+          <div class="price-tag" style="font-size: 1.45rem; color: #ffffff; margin-bottom: 1rem;">${formatARS(p.price)} ARS</div>
 
-          <p style="font-size: 0.85rem; color: #ccc; line-height: 1.6; margin-bottom: 1.5rem;">${p.desc}</p>
+          <p style="font-size: 0.84rem; color: #ccc; line-height: 1.5; margin-bottom: 0.85rem;">${p.desc}</p>
 
-          <div class="product-specs-section">
-            <span class="product-specs-title">Ficha técnica:</span>
-            <div class="product-specs-wrap">
-              ${specsHtml}
-            </div>
-          </div>
+          ${specsHtml}
+          ${measurementsHtml}
         </div>
 
         <div>
-          <div class="size-selector-wrap">
+          <div class="size-selector-wrap" style="margin-top: 0.5rem;">
             <span class="size-selector-label">Seleccionar Talle:</span>
             <div class="size-options">
               ${sizeBtnsHtml}
@@ -721,11 +843,11 @@
           </div>
 
           ${soldOut ? `
-            <button class="add-bag-btn font-ui is-soldout" disabled style="padding: 16px; font-size: 0.85rem;">
+            <button class="add-bag-btn font-ui is-soldout" disabled style="padding: 15px; font-size: 0.85rem;">
               <span>SIN STOCK</span>
             </button>
           ` : `
-            <button class="add-bag-btn font-ui" onclick="window.addToCart('${p.id}'); window.closeProductDetail();" style="padding: 16px; font-size: 0.85rem;">
+            <button class="add-bag-btn font-ui" onclick="window.addToCart('${p.id}'); window.closeProductDetail();" style="padding: 15px; font-size: 0.85rem;">
               <svg class="icon-svg" style="width:18px;height:18px;" viewBox="0 0 24 24">
                 <line x1="12" y1="5" x2="12" y2="19"></line>
                 <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -790,6 +912,13 @@
         if (parent) {
           parent.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
           this.classList.add('active');
+        }
+
+        const detailBox = this.closest('#productDetailBox');
+        if (detailBox) {
+          detailBox.querySelectorAll('.size-table-row').forEach(row => {
+            row.classList.toggle('is-active-size', row.getAttribute('data-size-row') === size);
+          });
         }
       });
     });
