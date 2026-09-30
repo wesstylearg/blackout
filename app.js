@@ -10,7 +10,7 @@
   'use strict';
 
   // AUTO-PURGA DE CACHÉ SEGURA (Diferida para no interrumpir peticiones en vuelo)
-  const BH_BUILD_VERSION = '2026.09.24.6_V4';
+  const BH_BUILD_VERSION = '2026.09.30.2_V5';
   if (typeof window !== 'undefined') {
     window.addEventListener('load', function () {
       setTimeout(function () {
@@ -370,9 +370,6 @@
           ${getProductMediaHtml(p)}
           ${hasMultipleImages ? `
             <div class="card-dots-indicator">
-              ${p.images.map((_, idx) => `<span class="card-dot ${idx === 0 ? 'active' : ''}"></span>`).join('')}
-            </div>
-          ` : ''}
               ${p.images.map((_, idx) => `<span class="card-dot ${idx === 0 ? 'active' : ''}"></span>`).join('')}
             </div>
           ` : ''}
