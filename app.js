@@ -10,7 +10,7 @@
   'use strict';
 
   // AUTO-PURGA DE CACHÉ SEGURA (Diferida para no interrumpir peticiones en vuelo)
-  const BH_BUILD_VERSION = '2026.09.30.3_V6';
+  const BH_BUILD_VERSION = '2026.09.30.4_V7';
   if (typeof window !== 'undefined') {
     window.addEventListener('load', function () {
       setTimeout(function () {
@@ -268,13 +268,13 @@
     return false;
   }
 
-  // OPTIMIZACIÓN CLOUDINARY (WebP/AVIF automático, compresión inteligente y escalado exacto)
+  // OPTIMIZACIÓN CLOUDINARY ROBUSTA (Calidad nítida, sin artefactos de compresión y escalado exacto)
   function optimizeCloudinaryUrl(url, width = 600) {
     if (!url || typeof url !== 'string') return url || '';
     if (url.includes('res.cloudinary.com') && url.includes('/upload/')) {
-      if (!url.includes('/upload/f_auto') && !url.includes('/upload/q_auto')) {
-        return url.replace('/upload/', `/upload/f_auto,q_auto,w_${width},c_limit/`);
-      }
+      // Limpiar cualquier prefijo de transformación existente (evita duplicados o compresión residual excesiva)
+      const cleanUrl = url.replace(/\/upload\/(?:(?:f_auto|q_auto|w_\d+|c_\w+)[^\/]*\/)+/, '/upload/');
+      return cleanUrl.replace('/upload/', `/upload/f_auto,q_auto:best,w_${width},c_limit/`);
     }
     return url;
   }
@@ -283,7 +283,7 @@
     const rawSrc = (product.images && product.images.length > 0) ? product.images[0] : product.image;
     if (rawSrc) {
       const optimizedSrc = optimizeCloudinaryUrl(rawSrc, isDetail ? 900 : 450);
-      return `<img src="${optimizedSrc}" alt="${product.name}" class="product-real-img" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='assets/mascota.svg'; this.style.opacity='0.4';">`;
+      return `<img src="${optimizedSrc}" alt="${product.name}" class="product-real-img" loading="lazy" onerror="this.onerror=null; this.src='assets/mascota.svg'; this.style.opacity='0.4';">`;
     }
     return `
       <div class="product-placeholder-box font-ui">
@@ -619,10 +619,10 @@
     }).join('');
 
     const specsHtml = p.specs.map(spec => `
-      <li style="margin-bottom: 0.5rem; color: #b3b3b3; font-size: 0.82rem; display:flex; align-items:center; gap:0.5rem;">
-        <span style="width:4px; height:4px; border-radius:50%; background:#fff; display:inline-block;"></span>
-        ${spec}
-      </li>
+      <div class="spec-pill font-ui">
+        <span class="spec-pill-dot"></span>
+        <span>${spec}</span>
+      </div>
     `).join('');
 
     const hasImages = p.images && p.images.length > 0;
@@ -631,7 +631,7 @@
     const thumbsHtml = hasImages
       ? p.images.map((imgSrc, i) => `
         <div class="detail-thumb-box ${i === 0 ? 'active' : ''}" data-img="${imgSrc}" data-index="${i}" onclick="window.setDetailImageIndex(${i}, event)">
-          <img src="${optimizeCloudinaryUrl(imgSrc, 140)}" alt="${p.name} vista ${i + 1}" loading="lazy" decoding="async">
+          <img src="${optimizeCloudinaryUrl(imgSrc, 180)}" alt="${p.name} vista ${i + 1}" onerror="this.onerror=null; this.src='assets/mascota.svg';">
         </div>
       `).join('')
       : p.views.map((v, i) => `
@@ -642,7 +642,7 @@
 
     const mainMediaHtml = hasImages
       ? `
-        <img id="detailMainRealImg" src="${optimizeCloudinaryUrl(p.images[0], 900)}" alt="${p.name}" class="detail-main-real-img" decoding="async">
+        <img id="detailMainRealImg" src="${optimizeCloudinaryUrl(p.images[0], 900)}" alt="${p.name}" class="detail-main-real-img" onerror="this.onerror=null; this.src='assets/mascota.svg';">
         ${hasMultipleImages ? `
           <button class="gallery-arrow-btn gallery-prev" aria-label="Foto anterior" onclick="window.changeDetailImage(-1, event)">
             <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
@@ -701,11 +701,11 @@
 
           <p style="font-size: 0.85rem; color: #ccc; line-height: 1.6; margin-bottom: 1.5rem;">${p.desc}</p>
 
-          <div style="margin-bottom: 1.5rem; border-top: 1px solid #222; padding-top: 1rem;">
-            <span style="font-size:0.72rem; color:#888; text-transform:uppercase; display:block; margin-bottom:0.5rem; font-weight:600;">Ficha técnica:</span>
-            <ul style="list-style: none; padding-left: 0;">
+          <div class="product-specs-section">
+            <span class="product-specs-title">Ficha técnica:</span>
+            <div class="product-specs-wrap">
               ${specsHtml}
-            </ul>
+            </div>
           </div>
         </div>
 
@@ -934,7 +934,7 @@
       return `
         <div class="cart-item-card" data-index="${index}">
           <div style="width:72px; height:72px; background:#0a0a0a; border:1px solid #222; border-radius:6px; display:flex; align-items:center; justify-content:center; color:#555; overflow:hidden; padding:4px;">
-            ${item.image ? `<img src="${optimizeCloudinaryUrl(item.image, 160)}" alt="${item.name}" loading="lazy" decoding="async" style="width:100%; height:100%; object-fit:contain;">` : `
+            ${item.image ? `<img src="${optimizeCloudinaryUrl(item.image, 240)}" alt="${item.name}" style="width:100%; height:100%; object-fit:contain;" onerror="this.onerror=null; this.src='assets/mascota.svg';">` : `
               <svg class="icon-svg" style="width:20px;height:20px;" viewBox="0 0 24 24">
                 <rect x="3" y="3" width="18" height="18"></rect>
                 <line x1="9" y1="9" x2="15" y2="15"></line>

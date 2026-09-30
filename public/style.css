@@ -1591,6 +1591,58 @@ button {
   justify-content: space-between;
 }
 
+/* COMPACT PRODUCT SPECS BADGES */
+.product-specs-section {
+  margin-bottom: 1.25rem;
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 0.9rem;
+}
+
+.product-specs-title {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+
+.product-specs-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.spec-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 11px;
+  background: rgba(136, 80, 201, 0.08);
+  border: 1px solid rgba(168, 85, 247, 0.22);
+  border-radius: var(--radius-xs);
+  font-size: 0.76rem;
+  color: #d8cde9;
+  line-height: 1.35;
+  transition: all 0.2s ease;
+}
+
+.spec-pill:hover {
+  background: rgba(136, 80, 201, 0.16);
+  border-color: var(--violet-glow);
+  color: #ffffff;
+}
+
+.spec-pill-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--violet-light);
+  flex-shrink: 0;
+  box-shadow: 0 0 6px var(--violet-neon);
+}
+
 /* CART DRAWER */
 .cart-backdrop {
   position: fixed;
@@ -2338,14 +2390,15 @@ button {
     margin-bottom: 0.5rem !important;
   }
 
-  .product-detail-info div[style*="border-top"] {
+  .product-specs-section {
     margin-bottom: 0.5rem !important;
     padding-top: 0.5rem !important;
   }
 
-  .product-detail-info ul li {
-    font-size: 0.74rem !important;
-    margin-bottom: 0.25rem !important;
+  .spec-pill {
+    font-size: 0.7rem !important;
+    padding: 3px 8px !important;
+    gap: 4px !important;
   }
 
   .product-detail-info .add-bag-btn {
