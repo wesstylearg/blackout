@@ -10,7 +10,7 @@
   'use strict';
 
   // AUTO-PURGA DE CACHÉ SEGURA (Diferida para no interrumpir peticiones en vuelo)
-  const BH_BUILD_VERSION = '2026.09.30.8_V10';
+  const BH_BUILD_VERSION = '2026.10.02.1_V11';
   if (typeof window !== 'undefined') {
     window.addEventListener('load', function () {
       setTimeout(function () {
@@ -1205,7 +1205,7 @@
     });
   }
 
-  const WHATSAPP_PHONE = '5492983611938';
+  const WHATSAPP_PHONE = '5492983647655';
 
   function generateOrderId() {
     const chars = '0123456789';
